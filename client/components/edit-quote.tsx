@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DateRangePicker } from "./date-range-picker";
 import { BudgetRangePicker } from "./budget-range-picker";
 
-export function CreateQuote() {
+export function EditQuote() {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [minBudget, setMinBudget] = useState<number | null>(null);
@@ -27,13 +27,20 @@ export function CreateQuote() {
 
   return (
     <div className="px-12">
-      <div className="mb-12">
-        <h1 className="font-headline-lg text-headline-lg text-on-surface mb-2">
-          Request Your Tailored Quote
+      <div className="mb-12 text-center md:text-left">
+        <nav className="flex gap-2 text-label-sm font-label-sm text-on-surface-variant mb-4 uppercase tracking-widest">
+          <a className="hover:text-primary" href="#">
+            Bookings
+          </a>
+          <span>/</span>
+          <span className="text-primary">Edit Request</span>
+        </nav>
+        <h1 className="font-headline-lg text-headline-lg md:text-headline-lg-mobile text-on-surface mb-2">
+          Edit Quote Request
         </h1>
-        <p className="font-body-lg text-body-lg text-text-secondary max-w-2xl">
-          Tell us about your dream journey. Our expert travel coordinators will
-          craft a personalized itinerary within 24 hours.
+        <p className="text-body-lg text-on-surface-variant max-w-2xl">
+          Modify your trip details below. Our travel coordinators will update
+          your quote based on these changes within 24 hours.
         </p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

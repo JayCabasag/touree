@@ -87,9 +87,14 @@ export function QuoteDetails({ request }: QuoteDetailsProps) {
           <span className="text-on-surface">{request.packageTitle}</span>
         </nav>
         <div className="flex items-center gap-3">
-          <button className="px-6 py-2.5 rounded-lg border border-outline text-on-surface font-semibold hover:bg-surface-container transition-all text-body-md">
-            Edit Request
-          </button>
+          {request.status == "offers_received" && (
+            <button
+              onClick={() => router.push("/quote-requests/1/edit")}
+              className="px-6 py-2.5 rounded-lg border border-outline text-on-surface font-semibold hover:bg-surface-container transition-all text-body-md"
+            >
+              Edit Request
+            </button>
+          )}
           <button
             onClick={() => handleCancelClick(request)}
             className="px-6 py-2.5 rounded-lg border border-error text-error font-semibold hover:bg-error-container transition-all text-body-md"

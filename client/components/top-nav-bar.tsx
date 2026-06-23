@@ -9,7 +9,7 @@ const navItems = [
   { label: "Destinations", href: "/", matchPaths: ["/", "/explore"] },
   { label: "Packages", href: "/packages" },
   { label: "Quote Requests", href: "/quote-requests" },
-  { label: "My Bookings", href: "/bookings" },
+  { label: "Bookings", href: "/bookings" },
 ];
 
 function isActive(

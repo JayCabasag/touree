@@ -2,6 +2,7 @@
 
 import { QuoteRequestCard } from "@/components/quote-request-card";
 import { QuoteRequest } from "@/lib/types";
+import { QuoteRequestHeader } from "./quote-request-header";
 
 export const quoteRequests: QuoteRequest[] = [
   {
@@ -73,7 +74,8 @@ export const quoteRequests: QuoteRequest[] = [
 
 export default function QuoteRequests() {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 mx-12">
+      <QuoteRequestHeader />
       {quoteRequests.map((request) => (
         <QuoteRequestCard key={request.id} request={request} />
       ))}

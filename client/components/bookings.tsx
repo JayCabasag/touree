@@ -1,6 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Dropdown } from "./ui/dropdown";
 
 type TabKey = "upcoming" | "past" | "cancelled";
 
@@ -82,14 +84,15 @@ const tabConfig: { key: TabKey; label: string }[] = [
   { key: "cancelled", label: "CANCELLED" },
 ];
 
-export function MyBookings() {
+export function Bookings() {
   const [activeTab, setActiveTab] = useState<TabKey>("upcoming");
+  const router = useRouter();
 
   return (
     <>
       <div className="mb-10 px-20">
         <h1 className="font-headline-lg text-headline-lg text-text-main mb-2">
-          My Bookings
+          Bookings
         </h1>
         <p className="text-text-secondary font-body-md">
           Manage your upcoming adventures and relive your past journeys.
@@ -217,17 +220,52 @@ export function MyBookings() {
                     </div>
                     <div className="flex flex-wrap gap-4 items-center justify-between">
                       <div className="flex gap-3">
-                        <button className="bg-primary text-on-primary px-6 py-3 rounded-lg font-bold text-sm transition-transform active:scale-95 flex items-center gap-2">
+                        <button
+                          onClick={() => router.push("/bookings/1")}
+                          className="bg-primary text-on-primary px-6 py-3 rounded-lg font-bold text-sm transition-transform active:scale-95 flex items-center gap-2"
+                        >
                           <span className="material-symbols-outlined text-lg">
                             {trip.description ? "info" : "description"}
                           </span>
-                          {trip.description ? "View Details" : "View Itinerary"}
+                          View Itinerary
                         </button>
-                        <button className="border border-outline text-text-main px-6 py-3 rounded-lg font-bold text-sm hover:bg-surface-container-low transition-colors flex items-center gap-2">
-                          {trip.description
-                            ? "Trip Details"
-                            : "Chat with Coordinator"}
-                        </button>
+                        <Dropdown
+                          variant="outline"
+                          icon={
+                            <span className="material-symbols-outlined">
+                              chat_bubble_outline
+                            </span>
+                          }
+                          options={[
+                            {
+                              label: "Messenger",
+                              href: "#",
+                              icon: (
+                                <span className="material-symbols-outlined">
+                                  chat
+                                </span>
+                              ),
+                            },
+                            {
+                              label: "Telegram",
+                              href: "#",
+                              icon: (
+                                <span className="material-symbols-outlined">
+                                  send
+                                </span>
+                              ),
+                            },
+                            {
+                              label: "Other Apps",
+                              href: "#",
+                              icon: (
+                                <span className="material-symbols-outlined">
+                                  more_horiz
+                                </span>
+                              ),
+                            },
+                          ]}
+                        />
                       </div>
                       <button className="text-text-secondary hover:text-error text-sm font-semibold flex items-center gap-1 transition-colors">
                         Manage Booking
@@ -331,7 +369,10 @@ export function MyBookings() {
                     </div>
                     <div className="flex flex-wrap gap-4 items-center justify-between">
                       <div className="flex gap-3">
-                        <button className="bg-primary text-on-primary px-6 py-3 rounded-lg font-bold text-sm transition-transform active:scale-95 flex items-center gap-2">
+                        <button
+                          onClick={() => router.push("/bookings/1")}
+                          className="bg-primary text-on-primary px-6 py-3 rounded-lg font-bold text-sm transition-transform active:scale-95 flex items-center gap-2"
+                        >
                           <span className="material-symbols-outlined text-lg">
                             description
                           </span>
@@ -395,16 +436,13 @@ export function MyBookings() {
                           <div className="text-text-main font-bold text-xl line-through opacity-60">
                             {trip.price}
                           </div>
-                          <div className="text-secondary text-xs uppercase tracking-tighter font-semibold">
-                            {trip.refundStatus}
-                          </div>
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-6 border-y border-outline-variant/20 mb-6">
                         <div className="flex flex-col gap-1">
                           <span className="text-xs text-text-secondary uppercase">
-                            Travelers
+                            Guests
                           </span>
                           <span className="font-semibold text-sm">
                             {trip.travelers}
@@ -427,9 +465,6 @@ export function MyBookings() {
                             replay
                           </span>
                           Rebook Trip
-                        </button>
-                        <button className="border border-outline text-text-main px-6 py-3 rounded-lg font-bold text-sm hover:bg-surface-container-low transition-colors">
-                          View Refund Details
                         </button>
                       </div>
                     </div>

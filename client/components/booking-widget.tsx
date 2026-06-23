@@ -175,7 +175,7 @@ export function BookingWidget({
               <Dialog.Description className="text-text-secondary text-body-md leading-relaxed mb-8">
                 Your request for this package has been sent to the coordinator.
                 Please wait for them to confirm your booking. You can track the
-                status in your &apos;My Bookings&apos; page. The coordinator may
+                status in your &apos;Bookings&apos; page. The coordinator may
                 also contact you for additional inquiries or to finalize
                 details.
               </Dialog.Description>
