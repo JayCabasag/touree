@@ -1,0 +1,36 @@
+{
+  "name": "touree",
+  "version": "1.0.0",
+  "description": "Find tours and travel packages easily, anytime, anywhere.",
+  "keywords": [
+    "touree"
+  ],
+  "homepage": "https://github.com/JayCabasag/touree#readme",
+  "bugs": {
+    "url": "https://github.com/JayCabasag/touree/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JayCabasag/touree.git"
+  },
+  "license": "ISC",
+  "author": "Jay Cabasag",
+  "type": "commonjs",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "format-all": "prettier --write \"**/*.ts\" \"**/*.js\" \"**/*.yml\" \"**/*.md\" \"**/*.json\"",
+    "format": "prettier --write \"**/*.ts\"",
+    "setup": "npm run setup:server && npm run setup:client && npm run setup:client-admin && npm run setup:client-coordinator",
+    "setup:server": "cd server && npm install",
+    "setup:client": "cd client && npm install",
+    "setup:client-admin": "cd client-admin && npm install",
+    "setup:client-coordinator": "cd client-coordinator && npm install",
+    "start:client": "cd client && npm run start"
+  },
+  "devDependencies": {
+    "prettier": "3.8.4"
+  }
+}
