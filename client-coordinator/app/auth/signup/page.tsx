@@ -15,16 +15,6 @@ export default function SignUpPage() {
         <div className="absolute inset-0 bg-linear-to-t from-on-surface via-on-surface/40 to-transparent z-10"></div>
 
         <div className="relative z-20 w-full flex flex-col justify-between p-margin-desktop">
-          <div className="flex items-center space-x-2 text-on-primary">
-            <div>
-              <h1 className="font-headline-lg text-headline-lg font-extrabold tracking-tight">
-                Touree
-              </h1>
-              <p className="font-label-sm text-label-sm opacity-70">
-                Coordinator
-              </p>
-            </div>
-          </div>
           <div className="max-w-xl">
             <h1 className="font-headline-lg text-headline-lg text-white mb-6">
               Join our global network of elite coordinators.
