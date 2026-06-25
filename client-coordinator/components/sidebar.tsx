@@ -50,7 +50,7 @@ export function Sidebar() {
         })}
       </nav>
       <div className="p-4 mt-auto">
-        <button className="w-full bg-primary text-on-primary py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-md">
+        <button className="cursor-pointer px-6 py-2 w-full bg-primary text-on-primary rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-md">
           <span className="material-symbols-outlined">add</span>
           Create Package
         </button>

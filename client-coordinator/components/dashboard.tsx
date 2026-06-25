@@ -1,11 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { PendingBookings } from "./pending-bookings";
 import { RecentActivities } from "./recent-activities";
 import { Stats as DashboardStats } from "./stats";
 import { UpcommingDepartures } from "./upcoming-departures";
 
 export function Dashboard() {
+  const router = useRouter();
   return (
     <>
       <div className="mb-8 flex justify-between items-end">
@@ -18,7 +20,10 @@ export function Dashboard() {
           </p>
         </div>
         <div className="hidden lg:block">
-          <button className="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:shadow-lg transition-all">
+          <button
+            onClick={() => router.push("/packages/create")}
+            className="cursor-pointer px-6 py-2 bg-primary text-on-primary rounded-xl font-bold flex items-center gap-2 hover:shadow-lg transition-all"
+          >
             <span className="material-symbols-outlined">add</span>
             New Package
           </button>
