@@ -1,13 +1,14 @@
-import { Controller } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { UsersService } from '../users/users.service';
-import { AuthService } from './auth.service';
+import { Controller, Post } from '@nestjs/common';
 
 @Controller('auth')
-@ApiTags('auth')
 export class AuthController {
-  constructor(
-    private usersService: UsersService,
-    private authService: AuthService,
-  ) {}
+  @Post('login')
+  login() {
+    return { message: 'Login' };
+  }
+
+  @Post('register')
+  register() {
+    return { message: 'Register' };
+  }
 }

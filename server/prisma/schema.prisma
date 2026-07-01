@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat  = "cjs"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  password  String
+  roleId    Int
+  role      Role     @relation(fields: [roleId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  travelerBookings    Booking[] @relation("TravelerBookings")
+  coordinatorBookings Booking[] @relation("CoordinatorBookings")
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+
+  users     User[]
+}
+
+model TourPackage {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  location    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  bookings    Booking[]
+  images      TourPackageImage[]
+}
+
+model TourPackageImage {
+  id             Int         @id @default(autoincrement())
+  
+  tourPackageId  Int
+  tourPackage    TourPackage @relation(fields: [tourPackageId], references: [id], onDelete: Cascade)
+
+  url            String
+  order          Int @default(0)
+
+  createdAt      DateTime @default(now())
+}
+
+model Booking {
+  id            Int      @id @default(autoincrement())
+
+  packageId Int
+  package   TourPackage @relation(fields: [packageId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  travelerId Int
+  traveler   User @relation("TravelerBookings", fields: [travelerId], references: [id])
+
+  coordinatorId Int
+  coordinator   User @relation("CoordinatorBookings", fields: [coordinatorId], references: [id])
+
+}
