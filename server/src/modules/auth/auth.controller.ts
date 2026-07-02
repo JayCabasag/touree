@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly service: AuthService) {}
 
-  @Post('login')
+  @Post('email/ogin')
   async login() {
     return { message: 'Login' };
   }
@@ -18,5 +18,10 @@ export class AuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async register(@Body() createUserDto: AuthRegisterDTO): Promise<void> {
     return this.service.register(createUserDto);
+  }
+
+  @Post('email/confirm-new')
+  async configmNewEmail() {
+    // return this.service
   }
 }
