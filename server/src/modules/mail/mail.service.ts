@@ -13,10 +13,11 @@ export class MailService {
     private readonly configService: ConfigService<AllConfigType>,
   ) {}
   async userSignUp(mailData: MailData<{ hash: string }>): Promise<void> {
-    let emailConfirmTitle: MaybeType<string>;
-    let text1: MaybeType<string>;
-    let text2: MaybeType<string>;
-    let text3: MaybeType<string>;
+    let emailConfirmTitle: MaybeType<string> = 'Confirm Email';
+    let text1: MaybeType<string> = 'Hey!';
+    let text2: MaybeType<string> = "You're almost ready to start enjoying";
+    let text3: MaybeType<string> =
+      'Simply click the big green button below to verify your email address.';
 
     const url = new URL(
       this.configService.getOrThrow('app.frontendDomain', {
@@ -34,6 +35,7 @@ export class MailService {
           infer: true,
         }),
         'src',
+        'modules',
         'mail',
         'mail-templates',
         'activation.hbs',

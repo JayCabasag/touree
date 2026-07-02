@@ -21,3 +21,9 @@ export const authLoginSchema = z.object({
 });
 
 export class AuthLoginDTO extends createZodDto(authLoginSchema) {}
+
+export const authConfirmEmailSchema = z.object({
+  hash: z.string().min(1, { message: 'hash is required' }),
+});
+
+export class AuthConfirmEmailDTO extends createZodDto(authConfirmEmailSchema) {}
