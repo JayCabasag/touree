@@ -12,6 +12,7 @@ import { ZodValidationPipe } from './pipes/zod-validation.pipe';
 import { AuthGoogleModule } from './modules/auth-google/auth-google.module';
 import { MailModule } from './modules/mail/mail.module';
 import { MailerModule } from './modules/mailer/mailer.module';
+import { SessionModule } from './modules/session/session.module';
 import authConfig from './modules/config/auth.config';
 import appConfig from './modules/config/app.config';
 import mailConfig from './modules/config/mail.config';
@@ -32,6 +33,7 @@ import mailConfig from './modules/config/mail.config';
     AuthGoogleModule,
     MailModule,
     MailerModule,
+    SessionModule,
   ],
   controllers: [],
   providers: [

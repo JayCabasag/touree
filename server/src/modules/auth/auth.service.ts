@@ -2,15 +2,26 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { AuthProviderEnum, AuthRegisterDTO } from './auth.schemas';
+import {
+  AuthLoginDTO,
+  AuthProviderEnum,
+  AuthRegisterDTO,
+} from './auth.schemas';
 import { UserService } from '../user/user.service';
 import { RoleEnum, StatusEnum } from '../user/user.schemas';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AllConfigType } from '../config/config.type';
 import { MailService } from '../mail/mail.service';
-import { User } from '../../generated/prisma/client';
+import { Session, User } from '../../generated/prisma/client';
+import * as bcrypt from 'bcrypt';
+import crypto from 'crypto';
+import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
+import ms from 'ms';
+import { SessionService } from '../session/session.service';
+import { toUserDTO } from '../user/user.mapper';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +30,50 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly configService: ConfigService<AllConfigType>,
     private readonly mailService: MailService,
+    private readonly sessionService: SessionService,
   ) {}
+
+  async validateLogin(loginDto: AuthLoginDTO) {
+    const user = await this.userService.getByEmail(loginDto.email);
+
+    if (!user || user.provider !== AuthProviderEnum.EMAIL || !user.password) {
+      throw new UnauthorizedException('invalidCredentials');
+    }
+
+    const isValidPassword = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
+
+    if (!isValidPassword) {
+      throw new UnauthorizedException('invalidCredentials');
+    }
+
+    const hash = crypto
+      .createHash('sha256')
+      .update(randomStringGenerator())
+      .digest('hex');
+
+    const session = await this.sessionService.create({
+      userId: user.id,
+      hash,
+    });
+
+    const { token, refreshToken, tokenExpires } = await this.getTokensData({
+      id: user.id,
+      role: user.role,
+      sessionId: session.id,
+      hash,
+    });
+
+    return {
+      refreshToken,
+      token,
+      tokenExpires,
+      user: toUserDTO(user),
+    };
+  }
+
   async register(dto: AuthRegisterDTO) {
     const user = await this.userService.create({
       ...dto,
@@ -76,5 +130,53 @@ export class AuthService {
     user.status = StatusEnum.active;
 
     await this.userService.update(user.id, user);
+  }
+
+  private async getTokensData(data: {
+    id: User['id'];
+    role: User['role'];
+    sessionId: Session['id'];
+    hash: Session['hash'];
+  }) {
+    const tokenExpiresIn = this.configService.getOrThrow('auth.expires', {
+      infer: true,
+    });
+
+    const tokenExpires = Date.now() + ms(tokenExpiresIn);
+
+    const [token, refreshToken] = await Promise.all([
+      await this.jwtService.signAsync(
+        {
+          id: data.id,
+          role: data.role,
+          sessionId: data.sessionId,
+        },
+        {
+          secret: this.configService.getOrThrow('auth.secret', {
+            infer: true,
+          }),
+        },
+      ),
+      await this.jwtService.signAsync(
+        {
+          sessionId: data.sessionId,
+          hash: data.hash,
+        },
+        {
+          secret: this.configService.getOrThrow('auth.refreshSecret', {
+            infer: true,
+          }),
+          expiresIn: this.configService.getOrThrow('auth.refreshExpires', {
+            infer: true,
+          }),
+        },
+      ),
+    ]);
+
+    return {
+      token,
+      refreshToken,
+      tokenExpires,
+    };
   }
 }
