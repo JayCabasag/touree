@@ -10,7 +10,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Touree API')
-    .setDescription('The cats API description')
+    .setDescription('The touree API description')
     .setVersion('1.0')
     .addTag('touree')
     .build();

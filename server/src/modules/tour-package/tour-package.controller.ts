@@ -8,14 +8,11 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { TourPackageService } from './tour-package.service';
-import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
 import {
   CreateTourPackageDTO,
-  createTourPackageSchema,
   GetTourPackagesQueryDTO,
-  getTourPackagesQuerySchema,
   TourPackgeDTO,
-} from './tour-packge.schemas';
+} from './tour-package.schemas';
 import { getPage } from '../shared/pagination';
 import { toTourPackageDTO } from './tour-package.mapper';
 
@@ -24,7 +21,6 @@ export class TourPackageController {
   constructor(private readonly service: TourPackageService) {}
 
   @Post()
-  @UsePipes(new ZodValidationPipe(createTourPackageSchema))
   async createTourPackage(
     @Body() data: CreateTourPackageDTO,
   ): Promise<TourPackgeDTO> {
@@ -32,7 +28,6 @@ export class TourPackageController {
   }
 
   @Get()
-  @UsePipes(new ZodValidationPipe(getTourPackagesQuerySchema))
   async getTourPackages(
     @Query() query: GetTourPackagesQueryDTO,
   ): Promise<TourPackgeDTO[]> {

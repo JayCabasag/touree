@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, TourPackage } from '../../generated/prisma/client';
-import { CreateTourPackage } from './tour-packge.schemas';
 import { Filters, Page, PaginatedData } from '../shared/shared.types';
 import { queryParameters } from '../shared/pagination';
+import { CreateTourPackageDTO } from './tour-package.schemas';
 
 @Injectable()
 export class TourPackageService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: CreateTourPackage): Promise<TourPackage> {
+  async create(data: CreateTourPackageDTO): Promise<TourPackage> {
     return await this.prisma.tourPackage.create({
       data: data as Prisma.TourPackageUncheckedCreateInput,
     });

@@ -19,29 +19,6 @@ async function main() {
   console.log('📭 Database is empty. Seeding...');
 
   //
-  // Roles
-  //
-  const [adminRole, coordinatorRole, travelerRole] = await Promise.all([
-    prisma.role.create({
-      data: {
-        name: 'ADMIN',
-      },
-    }),
-    prisma.role.create({
-      data: {
-        name: 'COORDINATOR',
-      },
-    }),
-    prisma.role.create({
-      data: {
-        name: 'TRAVELER',
-      },
-    }),
-  ]);
-
-  console.log('✅ Created roles');
-
-  //
   // Users
   //
   const password = await bcrypt.hash('test12345', 10);
@@ -49,27 +26,36 @@ async function main() {
   const admin = await prisma.user.create({
     data: {
       email: 'admin@touree.com',
-      name: 'System Administrator',
+      firstName: 'System',
+      lastName: 'Administrator',
       password,
-      roleId: adminRole.id,
-    },
-  });
-
-  const coordinator = await prisma.user.create({
-    data: {
-      email: 'coordinator@touree.com',
-      name: 'John Coordinator',
-      password,
-      roleId: coordinatorRole.id,
+      role: 1,
+      provider: 'email',
+      status: 1,
     },
   });
 
   const traveler = await prisma.user.create({
     data: {
       email: 'traveler@touree.com',
-      name: 'Jane Traveler',
+      firstName: 'Jane',
+      lastName: 'Traveler',
       password,
-      roleId: travelerRole.id,
+      role: 2,
+      provider: 'email',
+      status: 1,
+    },
+  });
+
+  const coordinator = await prisma.user.create({
+    data: {
+      email: 'coordinator@touree.com',
+      firstName: 'John',
+      lastName: 'Coordinator',
+      password,
+      role: 3,
+      provider: 'email',
+      status: 1,
     },
   });
 
