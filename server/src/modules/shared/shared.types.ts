@@ -24,3 +24,5 @@ export interface PaginatedData<T> {
   data: T[];
   nextPage?: Page;
 }
+
+export type MaybeType<T> = T | undefined;

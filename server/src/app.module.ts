@@ -11,7 +11,9 @@ import { APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from './pipes/zod-validation.pipe';
 import { AuthGoogleModule } from './modules/auth-google/auth-google.module';
 import { MailModule } from './modules/mail/mail.module';
-import authConfig from './modules/auth/auth.config';
+import { MailerModule } from './modules/mailer/mailer.module';
+import authConfig from './modules/config/auth.config';
+import appConfig from './modules/config/app.config';
 
 @Module({
   imports: [
@@ -23,11 +25,12 @@ import authConfig from './modules/auth/auth.config';
     PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [authConfig],
+      load: [authConfig, appConfig],
     }),
     TourPackageModule,
     AuthGoogleModule,
     MailModule,
+    MailerModule,
   ],
   controllers: [],
   providers: [

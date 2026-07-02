@@ -5,6 +5,7 @@ import { RoleEnum, StatusEnum } from '../user/user.schemas';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AllConfigType } from '../config/config.type';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
     private readonly configService: ConfigService<AllConfigType>,
+    private readonly mailService: MailService,
   ) {}
   async register(dto: AuthRegisterDTO) {
     const user = await this.userService.create({
@@ -35,11 +37,11 @@ export class AuthService {
       },
     );
 
-    // await this.mailService.userSignUp({
-    //   to: dto.email,
-    //   data: {
-    //     hash,
-    //   },
-    // });
+    await this.mailService.userSignUp({
+      to: dto.email,
+      data: {
+        hash,
+      },
+    });
   }
 }
