@@ -6,7 +6,7 @@ import {
 import { CreateUserDto, RoleEnum, StatusEnum } from './user.schemas';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { Prisma } from '../../generated/prisma/client';
+import { Prisma, User } from '../../generated/prisma/client';
 
 @Injectable()
 export class UserService {
@@ -59,5 +59,16 @@ export class UserService {
     });
 
     return user;
+  }
+
+  async getById(id: number): Promise<User | null> {
+    return await this.prisma.user.findUnique({ where: { id } });
+  }
+
+  async update(id: number, user: User): Promise<void> {
+    await this.prisma.user.update({
+      where: { id },
+      data: user,
+    });
   }
 }

@@ -14,6 +14,7 @@ import { MailModule } from './modules/mail/mail.module';
 import { MailerModule } from './modules/mailer/mailer.module';
 import authConfig from './modules/config/auth.config';
 import appConfig from './modules/config/app.config';
+import mailConfig from './modules/config/mail.config';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import appConfig from './modules/config/app.config';
     PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [authConfig, appConfig],
+      load: [authConfig, appConfig, mailConfig],
     }),
     TourPackageModule,
     AuthGoogleModule,

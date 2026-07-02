@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { AuthRegisterDTO } from './auth.schemas';
+import { AuthConfirmEmailDTO, AuthRegisterDTO } from './auth.schemas';
 import { AuthService } from './auth.service';
 
 @Controller({
@@ -20,8 +20,11 @@ export class AuthController {
     return this.service.register(createUserDto);
   }
 
-  @Post('email/confirm-new')
-  async configmNewEmail() {
-    // return this.service
+  @Post('email/confirm')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async confirmNewEmail(
+    @Body() confirmEmailDto: AuthConfirmEmailDTO,
+  ): Promise<void> {
+    return this.service.confirmEmail(confirmEmailDto.hash);
   }
 }
