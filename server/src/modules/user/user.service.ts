@@ -54,15 +54,23 @@ export class UserService {
       status = data.status;
     }
 
-    const user = await this.prisma.user.create({
-      data: data as Prisma.UserUncheckedCreateInput,
+    return await this.prisma.user.create({
+      data: {
+        ...data,
+        password,
+        email,
+        role,
+        status,
+      } as Prisma.UserUncheckedCreateInput,
     });
-
-    return user;
   }
 
   async getById(id: number): Promise<User | null> {
     return await this.prisma.user.findUnique({ where: { id } });
+  }
+
+  async getByEmail(email: string): Promise<User | null> {
+    return await this.prisma.user.findUnique({ where: { email } });
   }
 
   async update(id: number, user: User): Promise<void> {

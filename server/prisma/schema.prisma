@@ -31,10 +31,20 @@ model User {
 
   travelerBookings    Booking[] @relation("TravelerBookings")
   coordinatorBookings Booking[] @relation("CoordinatorBookings")
+  sessions            Session[]
 
   @@unique([provider, socialId]) // prevents duplicate social accounts
 }
 
+model Session {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hash          String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?
+  deletedAt     DateTime?
+}
 
 model TourPackage {
   id          Int      @id @default(autoincrement())

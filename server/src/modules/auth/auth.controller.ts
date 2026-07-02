@@ -1,5 +1,9 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { AuthConfirmEmailDTO, AuthRegisterDTO } from './auth.schemas';
+import {
+  AuthConfirmEmailDTO,
+  AuthLoginDTO,
+  AuthRegisterDTO,
+} from './auth.schemas';
 import { AuthService } from './auth.service';
 
 @Controller({
@@ -9,9 +13,10 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly service: AuthService) {}
 
-  @Post('email/ogin')
-  async login() {
-    return { message: 'Login' };
+  @Post('email/login')
+  @HttpCode(HttpStatus.OK)
+  async login(@Body() loginDto: AuthLoginDTO) {
+    return this.service.validateLogin(loginDto);
   }
 
   @Post('email/register')

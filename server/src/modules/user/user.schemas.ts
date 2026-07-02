@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { createZodDto } from 'nestjs-zod';
+import { Serialized } from '../shared/shared.types';
+import { User } from '../../generated/prisma/client';
 
 export enum RoleEnum {
   admin = 1,
@@ -32,3 +34,7 @@ export const createUserSchema = z.object({
 });
 
 export class CreateUserDto extends createZodDto(createUserSchema) {}
+
+export type UserDTO = Serialized<
+  Omit<User, 'password' | 'provider' | 'socialId' | 'role' | 'status'>
+>;
