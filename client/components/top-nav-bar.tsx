@@ -8,7 +8,7 @@ import { Dialog } from "@base-ui/react/dialog";
 const navItems = [
   { label: "Destinations", href: "/", matchPaths: ["/", "/explore"] },
   { label: "Packages", href: "/packages" },
-  { label: "Quote Requests", href: "/quote-requests" },
+  // { label: "Quote Requests", href: "/quote-requests" },
   { label: "Bookings", href: "/bookings" },
 ];
 
