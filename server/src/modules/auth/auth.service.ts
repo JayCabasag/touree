@@ -12,7 +12,7 @@ import {
   RefreshResponseDto,
 } from './auth.schemas';
 import { UserService } from '../user/user.service';
-import { RoleEnum, StatusEnum } from '../user/user.schemas';
+import { RoleEnum, StatusEnum, UserDTO } from '../user/user.schemas';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AllConfigType } from '../config/config.type';
@@ -25,6 +25,8 @@ import ms from 'ms';
 import { SessionService } from '../session/session.service';
 import { toUserDTO } from '../user/user.mapper';
 import { JwtRefreshPayloadType } from './strategies/types/jwt-refresh-payload.type';
+import { JwtPayloadType } from './strategies/types/jwt-payload.type';
+import { NullableType } from '../shared/shared.types';
 
 @Injectable()
 export class AuthService {
@@ -133,6 +135,15 @@ export class AuthService {
     user.status = StatusEnum.active;
 
     await this.userService.update(user.id, user);
+  }
+
+  async me(userJwtPayload: JwtPayloadType) {
+    console.log(userJwtPayload);
+    const user = await this.userService.getById(userJwtPayload.id);
+    if (!user) {
+      throw new NotFoundException('userNotFound');
+    }
+    return toUserDTO(user);
   }
 
   async refreshToken(
