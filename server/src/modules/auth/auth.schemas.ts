@@ -27,3 +27,21 @@ export const authConfirmEmailSchema = z.object({
 });
 
 export class AuthConfirmEmailDTO extends createZodDto(authConfirmEmailSchema) {}
+
+export const refreshTokenResponseSchema = z.object({
+  token: z.string(),
+  refreshToken: z.string(),
+  tokenExpires: z.number(),
+});
+
+export class RefreshResponseDto extends createZodDto(
+  refreshTokenResponseSchema,
+) {}
+
+export const loginResponseSchema = z.object({
+  token: z.string(),
+  refreshToken: z.string(),
+  tokenExpires: z.number(),
+});
+
+export class LoginResponseDTO extends createZodDto(loginResponseSchema) {}

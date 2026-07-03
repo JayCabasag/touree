@@ -8,6 +8,8 @@ import {
   AuthLoginDTO,
   AuthProviderEnum,
   AuthRegisterDTO,
+  LoginResponseDTO,
+  RefreshResponseDto,
 } from './auth.schemas';
 import { UserService } from '../user/user.service';
 import { RoleEnum, StatusEnum } from '../user/user.schemas';
@@ -22,6 +24,7 @@ import { randomStringGenerator } from '@nestjs/common/utils/random-string-genera
 import ms from 'ms';
 import { SessionService } from '../session/session.service';
 import { toUserDTO } from '../user/user.mapper';
+import { JwtRefreshPayloadType } from './strategies/types/jwt-refresh-payload.type';
 
 @Injectable()
 export class AuthService {
@@ -130,6 +133,50 @@ export class AuthService {
     user.status = StatusEnum.active;
 
     await this.userService.update(user.id, user);
+  }
+
+  async refreshToken(
+    data: Pick<JwtRefreshPayloadType, 'sessionId' | 'hash'>,
+  ): Promise<LoginResponseDTO> {
+    const hash = crypto
+      .createHash('sha256')
+      .update(randomStringGenerator())
+      .digest('hex');
+
+    const session = await this.sessionService.updateByHash(
+      {
+        id: data.sessionId,
+        hash: data.hash,
+      },
+      { hash },
+    );
+
+    if (!session) {
+      throw new UnauthorizedException('invalidSession');
+    }
+
+    const user = await this.userService.getById(session.userId);
+
+    if (!user?.role) {
+      throw new UnauthorizedException('invalidSession');
+    }
+
+    const { token, refreshToken, tokenExpires } = await this.getTokensData({
+      id: session.userId,
+      role: user.role,
+      sessionId: session.id,
+      hash,
+    });
+
+    return {
+      token,
+      refreshToken,
+      tokenExpires,
+    };
+  }
+
+  async logout(data: Pick<JwtRefreshPayloadType, 'sessionId'>) {
+    return this.sessionService.deleteBydId(data.sessionId);
   }
 
   private async getTokensData(data: {
