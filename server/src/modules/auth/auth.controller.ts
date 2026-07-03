@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -63,5 +64,13 @@ export class AuthController {
     await this.service.logout({
       sessionId: request.user.sessionId,
     });
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.OK)
+  @Get('me')
+  async me(@Request() request) {
+    return this.service.me(request.user);
   }
 }
