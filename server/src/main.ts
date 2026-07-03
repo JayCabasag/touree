@@ -12,6 +12,7 @@ async function bootstrap() {
     .setTitle('Touree API')
     .setDescription('The touree API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .addTag('touree')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);

@@ -26,3 +26,5 @@ export interface PaginatedData<T> {
 }
 
 export type MaybeType<T> = T | undefined;
+
+export type OrNeverType<T> = T | never;
