@@ -1,0 +1,29 @@
+import { useCallback } from "react";
+import { Tokens } from "../types/tokens";
+import { User } from "../types/user";
+import useFetch from "../use-fetch";
+import { API_URL } from "../config";
+import wrapperFetchJsonResponse from "../wrapper-fetch-json-response";
+
+export type AuthLoginRequest = {
+  email: string;
+  password: string;
+};
+
+export type AuthLoginResponse = Tokens & {
+  user: User;
+};
+
+export function useAuthLoginService() {
+  const fetchBase = useFetch();
+
+  return useCallback(
+    (data: AuthLoginRequest) => {
+      return fetchBase(`${API_URL}/v1/auth/email/login`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      }).then(wrapperFetchJsonResponse<AuthLoginResponse>);
+    },
+    [fetchBase],
+  );
+}
