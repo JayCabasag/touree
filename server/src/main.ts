@@ -7,6 +7,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalInterceptors(new TransformInterceptor());
+  app.enableCors();
+  app.setGlobalPrefix('v1');
 
   const config = new DocumentBuilder()
     .setTitle('Touree API')
@@ -17,9 +19,6 @@ async function bootstrap() {
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
-
-  app.enableCors();
-  app.setGlobalPrefix('v1');
 
   await app.listen(process.env.PORT ?? 3000);
 }
