@@ -64,6 +64,7 @@ function TextInput(
             data-testid={props.testId}
             aria-invalid={!!props.error}
             className={cn(props.error && "border-destructive")}
+            placeholder={props.label}
           />
         ) : (
           <Input
@@ -85,6 +86,7 @@ function TextInput(
               props.size === "small" && "h-8",
               isPassword && "pe-10",
             )}
+            placeholder={props.label}
           />
         )}
         {isPassword && (

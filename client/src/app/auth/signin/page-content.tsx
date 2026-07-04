@@ -10,6 +10,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import FormTextInput from "@/components/form/form-text-input";
 import { FormActionButton } from "@/components/form/form-action-button";
+import Link from "next/link";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type SignInFormData = {
   email: string;
@@ -102,21 +105,18 @@ function Form() {
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 cursor-pointer group">
                 <div className="relative flex items-center">
-                  <input
-                    className="peer h-5 w-5 rounded border-outline-variant text-primary focus:ring-primary/20 cursor-pointer"
-                    type="checkbox"
-                  />
+                  <Checkbox />
                 </div>
                 <span className="font-body-md text-body-md text-text-secondary group-hover:text-on-surface transition-colors">
                   Remember me
                 </span>
               </label>
-              <a
+              <Link
                 className="font-body-md text-body-md text-secondary hover:underline transition-all"
-                href="#"
+                href="/auth/forgot-password"
               >
                 Forgot password?
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -130,9 +130,9 @@ function Form() {
                 <div className="w-full border-t border-outline-variant"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-on-surface-variant font-label-sm text-label-sm">
+                <Label className="px-4 bg-white text-on-surface-variant font-label-sm text-label-sm">
                   OR CONTINUE WITH
-                </span>
+                </Label>
               </div>
             </div>
           </div>
@@ -162,6 +162,21 @@ function Form() {
               </svg>
               Sign in with Google
             </button>
+          </div>
+
+          <div className="col-span-12">
+            <div className="pt-8 text-center">
+              <Label>
+                Don&apos;t have an account?
+                <Link
+                  className="text-primary font-bold hover:underline transition-all"
+                  href="/auth/signup"
+                >
+                  {" "}
+                  Sign up
+                </Link>
+              </Label>
+            </div>
           </div>
         </div>
       </form>
