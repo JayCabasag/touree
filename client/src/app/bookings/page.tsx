@@ -1,10 +1,5 @@
-import { Bookings } from "@/components/bookings";
-import { Container } from "@/components/ui/container";
+import Bookings from "./page-content";
 
-export default function BookingsPage() {
-  return (
-    <Container>
-      <Bookings />
-    </Container>
-  );
+export default function Page() {
+  return <Bookings />;
 }

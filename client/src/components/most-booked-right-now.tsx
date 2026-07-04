@@ -57,7 +57,7 @@ export function MostBookedRightNow() {
       <div className="flex justify-between items-end mb-12">
         <div>
           <h2 className="font-headline-lg text-headline-lg text-on-surface mb-2">
-            Most Booked Right Now
+            Most booked right now
           </h2>
           <p className="text-on-surface-variant max-w-md">
             Discover the destinations our travelers are booking right now.

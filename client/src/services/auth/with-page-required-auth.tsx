@@ -1,4 +1,5 @@
 "use client";
+
 import { useRouter } from "next/navigation";
 import useAuth from "./use-auth";
 import { FunctionComponent, useEffect } from "react";
@@ -28,11 +29,7 @@ function withPageRequiredAuth(
     const router = useRouter();
     useEffect(() => {
       const check = () => {
-        if (
-          (user && user?.role && optionRoles.includes(Number(user?.role))) ||
-          !isLoaded
-        )
-          return;
+        if (user || !isLoaded) return;
 
         const currentLocation = window.location.toString();
         const returnToPath =
@@ -41,10 +38,10 @@ function withPageRequiredAuth(
           returnTo: returnToPath,
         });
 
-        let redirectTo = `/sign-in?${params.toString()}`;
+        let redirectTo = `/auth/signin?${params.toString()}`;
 
         if (user) {
-          redirectTo = `/`;
+          redirectTo = `/auth/signin`;
         }
 
         router.replace(redirectTo);
@@ -53,9 +50,7 @@ function withPageRequiredAuth(
       check();
     }, [user, isLoaded, router]);
 
-    return user && user?.role && optionRoles.includes(Number(user?.role)) ? (
-      <Component {...props} />
-    ) : null;
+    return user ? <Component {...props} /> : null;
   };
 }
 

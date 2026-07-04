@@ -1,5 +1,3 @@
-import { RoleEnum } from "./role";
-
 export enum UserProviderEnum {
   EMAIL = "email",
   GOOGLE = "google",
@@ -13,5 +11,4 @@ export type User = {
   photo?: string;
   provider?: UserProviderEnum;
   socialId?: string;
-  role?: RoleEnum;
 };
