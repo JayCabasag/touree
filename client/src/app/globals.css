@@ -76,6 +76,9 @@
   --on-tertiary-fixed-variant: #005139;
 
   --surface-tint: #b52330;
+
+  --destructive: #dc2626;
+  --on-destructive: #ffffff;
 }
 
 @theme inline {
@@ -117,6 +120,9 @@
 
   --color-error: var(--error);
   --color-error-container: var(--error-container);
+
+  --color-destructive: var(--destructive);
+  --color-on-destructive: var(--on-destructive);
 
   --color-outline: var(--outline);
   --color-outline-variant: var(--outline-variant);
