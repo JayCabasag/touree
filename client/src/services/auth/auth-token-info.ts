@@ -7,6 +7,7 @@ export function getTokensInfo() {
 }
 
 export function setTokensInfo(tokens: TokensInfo) {
+  console.log(tokens);
   if (tokens) {
     Cookies.set(AUTH_TOKEN_KEY, JSON.stringify(tokens));
   } else {

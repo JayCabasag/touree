@@ -13,6 +13,7 @@ import { FormActionButton } from "@/components/form/form-action-button";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import withPageRequiredGuest from "@/services/auth/with-page-requred-guests";
 
 type SignInFormData = {
   email: string;
@@ -184,7 +185,7 @@ function Form() {
   );
 }
 
-export function SignIn() {
+function SignIn() {
   return (
     <AuthPageLayout
       heroImageUrl="/images/signin-panel-bg.png"
@@ -196,3 +197,5 @@ export function SignIn() {
     </AuthPageLayout>
   );
 }
+
+export default withPageRequiredGuest(SignIn);
