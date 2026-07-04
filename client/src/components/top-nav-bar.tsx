@@ -5,6 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Dialog } from "@base-ui/react/dialog";
 import useAuth from "@/services/auth/use-auth";
+import { NavigationMenu } from "@base-ui/react";
+import useAuthActions from "@/services/auth/use-auth-actions";
 
 const navItems = [
   { label: "Destinations", href: "/", matchPaths: ["/", "/explore"] },
@@ -31,6 +33,7 @@ export function TopNavBar() {
 
 export function MainTopNavBar() {
   const { user } = useAuth();
+  const { logOut } = useAuthActions();
   const pathname = usePathname();
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -43,14 +46,12 @@ export function MainTopNavBar() {
   return (
     <header className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md shadow-sm transition-all duration-300">
       <nav className="max-w-7xl mx-auto px-4 md:px-20 flex justify-between items-center h-20">
-        {/* Brand */}
         <Link href="/" className="flex items-center gap-2">
           <span className="font-headline-md text-headline-md font-bold text-primary">
             Touree
           </span>
         </Link>
 
-        {/* Navigation Links — desktop */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => {
             const active = isActive(pathname, item);
@@ -70,7 +71,6 @@ export function MainTopNavBar() {
           })}
         </div>
 
-        {/* Trailing Icons — desktop */}
         <div className="hidden md:flex items-center gap-4">
           {user ? (
             <div className="flex items-center gap-4">
@@ -80,9 +80,71 @@ export function MainTopNavBar() {
               >
                 <span className="material-symbols-outlined">notifications</span>
               </button>
-              <button className="cursor-pointer p-2 rounded-full hover:bg-surface-container-low transition-colors active:scale-95 text-primary">
-                <span className="material-symbols-outlined">person</span>
-              </button>
+
+              <NavigationMenu.Root>
+                <NavigationMenu.List>
+                  <NavigationMenu.Item>
+                    <NavigationMenu.Trigger className="cursor-pointer p-2 rounded-full hover:bg-surface-container-low transition-colors active:scale-95 text-primary">
+                      <span className="material-symbols-outlined">person</span>
+                    </NavigationMenu.Trigger>
+
+                    <NavigationMenu.Content className="p-2">
+                      <ul className="flex flex-col min-w-45">
+                        <li>
+                          <NavigationMenu.Link
+                            render={<Link href="/profile" />}
+                            className="flex items-center gap-3 rounded-xl px-3 py-2 text-body-md font-body-md text-on-surface hover:bg-surface-container-low transition-colors"
+                          >
+                            <span className="material-symbols-outlined text-on-surface-variant">
+                              account_circle
+                            </span>
+                            Profile
+                          </NavigationMenu.Link>
+                        </li>
+                        <li>
+                          <NavigationMenu.Link
+                            render={<Link href="/help" />}
+                            className="flex items-center gap-3 rounded-xl px-3 py-2 text-body-md font-body-md text-on-surface hover:bg-surface-container-low transition-colors"
+                          >
+                            <span className="material-symbols-outlined text-on-surface-variant">
+                              help
+                            </span>
+                            Help
+                          </NavigationMenu.Link>
+                        </li>
+                        <li>
+                          <button
+                            onClick={logOut}
+                            className="flex items-center gap-3 rounded-xl px-3 py-2 w-full text-left text-body-md font-body-md text-error hover:bg-surface-container-low transition-colors"
+                          >
+                            <span className="material-symbols-outlined">
+                              logout
+                            </span>
+                            Logout
+                          </button>
+                        </li>
+                      </ul>
+                    </NavigationMenu.Content>
+                  </NavigationMenu.Item>
+                </NavigationMenu.List>
+
+                <NavigationMenu.Portal>
+                  <NavigationMenu.Positioner
+                    className="z-50"
+                    sideOffset={8}
+                    collisionPadding={{
+                      top: 5,
+                      bottom: 5,
+                      left: 20,
+                      right: 20,
+                    }}
+                  >
+                    <NavigationMenu.Popup className="bg-white rounded-2xl shadow-md origin-(--transform-origin) transition-[transform,scale,opacity] data-starting-style:opacity-0 data-starting-style:scale-95 data-ending-style:opacity-0 data-ending-style:scale-95">
+                      <NavigationMenu.Viewport />
+                    </NavigationMenu.Popup>
+                  </NavigationMenu.Positioner>
+                </NavigationMenu.Portal>
+              </NavigationMenu.Root>
             </div>
           ) : (
             <>
@@ -101,7 +163,6 @@ export function MainTopNavBar() {
           )}
         </div>
 
-        {/* Hamburger — mobile only */}
         <Dialog.Root open={drawerOpen} onOpenChange={setDrawerOpen}>
           <Dialog.Trigger
             className="md:hidden p-2 rounded-full hover:bg-surface-container-low transition-colors active:scale-95"

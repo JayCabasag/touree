@@ -138,7 +138,6 @@ export class AuthService {
   }
 
   async me(userJwtPayload: JwtPayloadType) {
-    console.log(userJwtPayload);
     const user = await this.userService.getById(userJwtPayload.id);
     if (!user) {
       throw new NotFoundException('userNotFound');

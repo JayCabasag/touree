@@ -2,18 +2,19 @@
 
 import { AuthPageLayout } from "@/components/layout/AuthPageLayout";
 import { useAuthLoginService } from "@/services/api/services/auth";
-import useAuthActions from "@/services/auth/use-auth-actions";
-import useAuthTokens from "@/services/auth/use-auth-tokens";
 import { FormProvider, useForm, useFormState } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
-import FormTextInput from "@/components/form/form-text-input";
 import { FormActionButton } from "@/components/form/form-action-button";
-import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+
+import useAuthActions from "@/services/auth/use-auth-actions";
+import useAuthTokens from "@/services/auth/use-auth-tokens";
+import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
+import FormTextInput from "@/components/form/form-text-input";
 import withPageRequiredGuest from "@/services/auth/with-page-requred-guests";
+import Link from "next/link";
+import * as yup from "yup";
 
 type SignInFormData = {
   email: string;
@@ -25,8 +26,8 @@ const useValidationSchema = () => {
     email: yup.string().email("Invalid email").required("Email is required"),
     password: yup
       .string()
-      .min(6, "Atleast 6 characters")
-      .required("Password required"),
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
   });
 };
 
@@ -61,9 +62,9 @@ function Form() {
     const { data, status } = await fetchAuthLogin(formData);
 
     if (status === HTTP_CODES_ENUM.UNAUTHORIZED) {
-      setError("root", {
+      setError("password", {
         type: "manual",
-        message: "Invalid credential",
+        message: "Incorrect password",
       });
       return;
     }
