@@ -24,7 +24,6 @@ import mailConfig from './modules/config/mail.config';
     UserModule,
     BookingModule,
     QuoteRequestModule,
-    PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [authConfig, appConfig, mailConfig],
