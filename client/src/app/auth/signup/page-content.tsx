@@ -12,6 +12,7 @@ import {
 import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import useAuthActions from "@/services/auth/use-auth-actions";
 import useAuthTokens from "@/services/auth/use-auth-tokens";
+import withPageRequiredGuest from "@/services/auth/with-page-requred-guests";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { FormProvider, useForm, useFormState } from "react-hook-form";
@@ -252,7 +253,7 @@ function Form() {
   );
 }
 
-export function SignUp() {
+function SignUp() {
   return (
     <AuthPageLayout
       heroImageUrl="/images/signup-panel-bg.png"
@@ -264,3 +265,5 @@ export function SignUp() {
     </AuthPageLayout>
   );
 }
+
+export default withPageRequiredGuest(SignUp);

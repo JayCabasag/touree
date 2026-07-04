@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Dialog } from "@base-ui/react/dialog";
+import useAuth from "@/services/auth/use-auth";
 
 const navItems = [
   { label: "Destinations", href: "/", matchPaths: ["/", "/explore"] },
@@ -29,6 +30,7 @@ export function TopNavBar() {
 }
 
 export function MainTopNavBar() {
+  const { user } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -70,25 +72,33 @@ export function MainTopNavBar() {
 
         {/* Trailing Icons — desktop */}
         <div className="hidden md:flex items-center gap-4">
-          <button
-            onClick={() => router.push("/notifications")}
-            className="p-2 rounded-full hover:bg-surface-container-low transition-colors active:scale-95"
-          >
-            <span className="material-symbols-outlined text-on-surface-variant">
-              notifications
-            </span>
-          </button>
-          <button
-            onClick={() => router.push("/auth/signin")}
-            className="flex items-center gap-2 pl-2 pr-4 py-1.5 rounded-full border border-outline-variant hover:bg-surface-container-low transition-all active:scale-95"
-          >
-            <span className="material-symbols-outlined text-primary">
-              person
-            </span>
-            <span className="text-label-sm font-label-sm uppercase tracking-wider text-on-surface">
-              Sign In
-            </span>
-          </button>
+          {user ? (
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => router.push("/notifications")}
+                className="cursor-pointer p-2 rounded-full hover:bg-surface-container-low transition-colors active:scale-95 text-primary"
+              >
+                <span className="material-symbols-outlined">notifications</span>
+              </button>
+              <button className="cursor-pointer p-2 rounded-full hover:bg-surface-container-low transition-colors active:scale-95 text-primary">
+                <span className="material-symbols-outlined">person</span>
+              </button>
+            </div>
+          ) : (
+            <>
+              <button
+                onClick={() => router.push("/auth/signin")}
+                className="flex items-center gap-2 pl-2 pr-4 py-1.5 rounded-full border border-outline-variant hover:bg-surface-container-low transition-all active:scale-95"
+              >
+                <span className="material-symbols-outlined text-primary">
+                  person
+                </span>
+                <span className="text-label-sm font-label-sm uppercase tracking-wider text-on-surface">
+                  Sign In
+                </span>
+              </button>
+            </>
+          )}
         </div>
 
         {/* Hamburger — mobile only */}
