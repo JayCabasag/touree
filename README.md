@@ -88,6 +88,7 @@ npm run prisma:db-seed
 Use the root formatting scripts to format workspace files:
 
 ```bash
+npm run format-all
 npm run format
 ```
 
