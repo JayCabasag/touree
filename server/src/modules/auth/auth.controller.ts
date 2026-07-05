@@ -25,16 +25,16 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 export class AuthController {
   constructor(private readonly service: AuthService) {}
 
-  @Post('email/login')
-  @HttpCode(HttpStatus.OK)
-  async login(@Body() loginDto: AuthLoginDTO) {
-    return this.service.validateLogin(loginDto);
-  }
-
   @Post('email/register')
   @HttpCode(HttpStatus.NO_CONTENT)
   async register(@Body() createUserDto: AuthRegisterDTO): Promise<void> {
     return this.service.register(createUserDto);
+  }
+
+  @Post('email/login')
+  @HttpCode(HttpStatus.OK)
+  async login(@Body() loginDto: AuthLoginDTO) {
+    return this.service.validateLogin(loginDto);
   }
 
   @Post('email/confirm')

@@ -7,6 +7,12 @@ import { CreateSessionDto } from './session.schema';
 export class SessionService {
   constructor(private readonly prisma: PrismaService) {}
 
+  getById(id: Session['id']): Promise<Session | null> {
+    return this.prisma.session.findFirst({
+      where: { id },
+    });
+  }
+
   create(data: CreateSessionDto): Promise<Session> {
     return this.prisma.session.create({
       data: data as Prisma.SessionUncheckedCreateInput,
