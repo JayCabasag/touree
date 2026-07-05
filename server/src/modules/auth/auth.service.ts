@@ -26,7 +26,6 @@ import { SessionService } from '../session/session.service';
 import { toUserDTO } from '../user/user.mapper';
 import { JwtRefreshPayloadType } from './strategies/types/jwt-refresh-payload.type';
 import { JwtPayloadType } from './strategies/types/jwt-payload.type';
-import { NullableType } from '../shared/shared.types';
 
 @Injectable()
 export class AuthService {

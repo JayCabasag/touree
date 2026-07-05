@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -26,7 +27,7 @@ export class UserService {
         },
       });
       if (userObject) {
-        throw new BadRequestException('emailAlreadyExists');
+        throw new ConflictException('emailAlreadyExists');
       }
       email = data.email;
     }

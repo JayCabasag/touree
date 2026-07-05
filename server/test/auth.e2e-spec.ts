@@ -1,8 +1,11 @@
+/// <reference types="jest" />
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
+import { ZodValidationPipe } from 'nestjs-zod';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication<App>;
@@ -20,8 +23,8 @@ describe('AuthController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true })); // match your main.ts setup
-    app.setGlobalPrefix('v1'); // remove if using enableVersioning instead
+    app.useGlobalPipes(new ZodValidationPipe());
+    app.setGlobalPrefix('v1');
     await app.init();
   });
 
@@ -51,7 +54,19 @@ describe('AuthController (e2e)', () => {
           firstName: 'Test',
           lastName: 'User',
         })
-        .expect(422); // or 400 depending on your exception filter setup
+        .expect(400);
+    });
+
+    it('should reject registration with password too short', () => {
+      return request(app.getHttpServer())
+        .post('/v1/auth/email/register')
+        .send({
+          email: testEmail,
+          password: 'shortp',
+          firstName: 'Test',
+          lastName: 'User',
+        })
+        .expect(400);
     });
 
     it('should reject registration with a duplicate email', () => {
@@ -63,7 +78,7 @@ describe('AuthController (e2e)', () => {
           firstName: 'Test',
           lastName: 'User',
         })
-        .expect(422); // adjust to whatever status your service throws for duplicates
+        .expect(409);
     });
   });
 
@@ -73,14 +88,14 @@ describe('AuthController (e2e)', () => {
       return request(app.getHttpServer())
         .post('/v1/auth/email/login')
         .send({ email: testEmail, password: testPassword })
-        .expect(200); // or 403/422 if unconfirmed accounts are blocked — adjust to your actual behavior
+        .expect(200);
     });
 
     it('should reject login with wrong password', () => {
       return request(app.getHttpServer())
         .post('/v1/auth/email/login')
         .send({ email: testEmail, password: 'wrongpassword' })
-        .expect(422); // adjust to your actual "invalid credentials" status
+        .expect(401);
     });
 
     it('should log in and return tokens', async () => {
