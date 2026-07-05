@@ -14,6 +14,36 @@ jobs:
       run:
         working-directory: ./server
 
+    env:
+      NODE_ENV: test
+      APP_PORT: 3000
+      APP_NAME: Touree
+      API_PREFIX: v1
+      FRONTEND_DOMAIN: http://localhost:3001
+      BACKEND_DOMAIN: http://localhost:3000
+
+      DATABASE_URL: mysql://root:root@127.0.0.1:3306/touree_test
+
+      AUTH_JWT_SECRET: test-jwt-secret
+      AUTH_JWT_TOKEN_EXPIRES_IN: 15m
+      AUTH_REFRESH_SECRET: test-refresh-secret
+      AUTH_REFRESH_TOKEN_EXPIRES_IN: 7d
+      AUTH_FORGOT_SECRET: test-forgot-secret
+      AUTH_FORGOT_TOKEN_EXPIRES_IN: 1h
+      AUTH_CONFIRM_EMAIL_SECRET: test-confirm-email-secret
+      AUTH_CONFIRM_EMAIL_TOKEN_EXPIRES_IN: 24h
+
+      MAIL_HOST: smtp.gmail.com
+      MAIL_PORT: 587
+      MAIL_USER: toureetravel@gmail.com
+      MAIL_PASSWORD: test-password
+      MAIL_IGNORE_TLS: "false"
+      MAIL_SECURE: "false"
+      MAIL_REQUIRE_TLS: "true"
+      MAIL_DEFAULT_EMAIL: noreply@touree.test
+      MAIL_DEFAULT_NAME: Touree
+      MAIL_CLIENT_PORT: 1080
+
     services:
       mysql:
         image: mysql:8.0
@@ -46,11 +76,7 @@ jobs:
       - run: pnpm exec prisma generate
 
       - run: pnpm exec prisma db push
-        env:
-          DATABASE_URL: mysql://root:root@127.0.0.1:3306/touree_test
 
       - run: pnpm run test:e2e
-        env:
-          DATABASE_URL: mysql://root:root@127.0.0.1:3306/touree_test
 
       - run: pnpm run build
