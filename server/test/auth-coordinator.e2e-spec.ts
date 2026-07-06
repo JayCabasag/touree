@@ -1,22 +1,19 @@
 /// <reference types="jest" />
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { RoleEnum } from '../src/modules/user/user.schemas';
 
-describe('AuthController (e2e)', () => {
+describe('CoordinatorAuthController (e2e)', () => {
   let app: INestApplication<App>;
 
   // Use a unique email per test run to avoid collisions on repeated runs
-  const testEmail = `test-${Date.now()}@example.com`;
+  const testEmail = `coordinator-test-${Date.now()}@example.com`;
   const testPassword = 'Password123!';
-
-  const coordinatorEmail = `user-cross-role-${Date.now()}@example.com`;
-  const coordinatorPassword = 'Password123!';
 
   let accessToken: string;
   let refreshToken: string;
@@ -36,75 +33,67 @@ describe('AuthController (e2e)', () => {
     await app.close();
   });
 
-  describe('/auth/email/register (POST)', () => {
-    it('should register a new user', () => {
+  describe('/auth/coordinator/email/register (POST)', () => {
+    it('should register a new coordinator', () => {
       return request(app.getHttpServer())
-        .post('/v1/auth/email/register')
+        .post('/v1/auth/coordinator/email/register')
         .send({
           email: testEmail,
           password: testPassword,
           firstName: 'Test',
-          lastName: 'User',
+          lastName: 'Coordinator',
         })
         .expect(204);
     });
 
     it('should reject registration with an invalid email', () => {
       return request(app.getHttpServer())
-        .post('/v1/auth/email/register')
+        .post('/v1/auth/coordinator/email/register')
         .send({
           email: 'not-an-email',
           password: testPassword,
           firstName: 'Test',
-          lastName: 'User',
+          lastName: 'Coordinator',
         })
         .expect(400);
     });
 
     it('should reject registration with password too short', () => {
       return request(app.getHttpServer())
-        .post('/v1/auth/email/register')
+        .post('/v1/auth/coordinator/email/register')
         .send({
           email: testEmail,
           password: 'shortp',
           firstName: 'Test',
-          lastName: 'User',
+          lastName: 'Coordinator',
         })
         .expect(400);
     });
 
     it('should reject registration with a duplicate email', () => {
       return request(app.getHttpServer())
-        .post('/v1/auth/email/register')
+        .post('/v1/auth/coordinator/email/register')
         .send({
           email: testEmail,
           password: testPassword,
           firstName: 'Test',
-          lastName: 'User',
+          lastName: 'Coordinator',
         })
         .expect(409);
     });
   });
 
-  describe('/auth/email/login (POST)', () => {
-    it('should reject login before email confirmation', () => {
-      // Skip/adjust this if your app doesn't require email confirmation before login
-      return request(app.getHttpServer())
-        .post('/v1/auth/email/login')
-        .send({ email: testEmail, password: testPassword })
-        .expect(200);
-    });
-
+  describe('/auth/coordinator/email/login (POST)', () => {
     it('should reject login with wrong password', () => {
       return request(app.getHttpServer())
-        .post('/v1/auth/email/login')
+        .post('/v1/auth/coordinator/email/login')
         .send({ email: testEmail, password: 'wrongpassword' })
         .expect(401);
     });
 
     it('should log in and return tokens', async () => {
       const response = await request(app.getHttpServer())
-        .post('/v1/auth/email/login')
+        .post('/v1/auth/coordinator/email/login')
         .send({ email: testEmail, password: testPassword })
         .expect(200);
 
@@ -116,63 +105,45 @@ describe('AuthController (e2e)', () => {
     });
   });
 
-  describe('cross-role login prevention (coordinator-only accounts)', () => {
-    beforeAll(async () => {
-      // Register an account through the COORDINATOR endpoint,
-      // then verify it cannot be used against the regular user endpoints.
-      await request(app.getHttpServer())
-        .post('/v1/auth/coordinator/email/register')
-        .send({
-          email: coordinatorEmail,
-          password: coordinatorPassword,
-          firstName: 'Test',
-          lastName: 'CrossRole',
-        })
-        .expect(204);
-    });
-
+  describe('cross-role login prevention', () => {
     it('should reject a coordinator account logging in via the regular user endpoint', () => {
       return request(app.getHttpServer())
         .post('/v1/auth/email/login')
-        .send({ email: coordinatorEmail, password: coordinatorPassword })
+        .send({ email: testEmail, password: testPassword })
         .expect(403); // adjust to whatever status validateLogin actually throws on role mismatch
     });
 
-    it('should reject registering the same email as a regular user after it exists as a coordinator', () => {
+    it('should reject a coordinator account registering the same email as a regular user', () => {
       return request(app.getHttpServer())
         .post('/v1/auth/email/register')
         .send({
-          email: coordinatorEmail,
-          password: coordinatorPassword,
+          email: testEmail,
+          password: testPassword,
           firstName: 'Test',
-          lastName: 'CrossRole',
+          lastName: 'Coordinator',
         })
         .expect(409); // email uniqueness should block this regardless of role
     });
   });
 
-  describe('/auth/me (GET)', () => {
+  describe('/auth/me (GET) — shared endpoint', () => {
     it('should reject request without token', () => {
       return request(app.getHttpServer()).get('/v1/auth/me').expect(401);
     });
 
-    it('should return current user profile with valid token', () => {
+    it('should return current coordinator profile with valid token', () => {
       return request(app.getHttpServer())
         .get('/v1/auth/me')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200)
         .expect((res) => {
           expect(res.body.email).toBe(testEmail);
-          expect(res.body.role).toBe(RoleEnum.user);
+          expect(res.body.role).toBe(RoleEnum.coordinator);
         });
     });
   });
 
-  describe('/auth/refresh (POST)', () => {
-    it('should reject refresh without token', () => {
-      return request(app.getHttpServer()).post('/v1/auth/refresh').expect(401);
-    });
-
+  describe('/auth/refresh (POST) — shared endpoint', () => {
     it('should issue new tokens with valid refresh token', async () => {
       const response = await request(app.getHttpServer())
         .post('/v1/auth/refresh')
@@ -182,17 +153,12 @@ describe('AuthController (e2e)', () => {
       expect(response.body).toHaveProperty('token');
       expect(response.body).toHaveProperty('refreshToken');
 
-      // update tokens for subsequent tests
       accessToken = response.body.token;
       refreshToken = response.body.refreshToken;
     });
   });
 
-  describe('/auth/logout (POST)', () => {
-    it('should reject logout without token', () => {
-      return request(app.getHttpServer()).post('/v1/auth/logout').expect(401);
-    });
-
+  describe('/auth/logout (POST) — shared endpoint', () => {
     it('should log out with valid token', () => {
       return request(app.getHttpServer())
         .post('/v1/auth/logout')
@@ -204,7 +170,7 @@ describe('AuthController (e2e)', () => {
       return request(app.getHttpServer())
         .get('/v1/auth/me')
         .set('Authorization', `Bearer ${accessToken}`)
-        .expect(401); // only valid if your jwt strategy checks session validity, not just signature
+        .expect(401);
     });
   });
 });
