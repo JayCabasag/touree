@@ -5,6 +5,8 @@ import { ScrollEffects } from "@/components/scroll-effects";
 import { TopNavBar } from "@/components/top-nav-bar";
 import { Footer } from "@/components/footer";
 import AuthProvider from "@/services/auth/auth-provider";
+import GoogleAuthProvider from "@/services/social-auth/google/google-auth-provider";
+import ThemeProvider from "@/components/theme/theme-provider";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -55,12 +57,16 @@ export default function MainLayout({
         />
       </head>
       <body className="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container">
-        <AuthProvider>
-          <ScrollEffects />
-          <TopNavBar />
-          <main className="pt-20">{children}</main>
-          <Footer />
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <GoogleAuthProvider>
+              <ScrollEffects />
+              <TopNavBar />
+              <main className="pt-20">{children}</main>
+              <Footer />
+            </GoogleAuthProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
