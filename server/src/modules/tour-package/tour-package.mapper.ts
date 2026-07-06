@@ -1,4 +1,4 @@
-import { TourPackage } from '../../generated/prisma/client';
+import { TourPackage } from '@prisma/client';
 import { TourPackgeDTO } from './tour-package.schemas';
 
 export function toTourPackageDTO(tourPackage: TourPackage): TourPackgeDTO {

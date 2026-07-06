@@ -2,12 +2,11 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
-  InternalServerErrorException,
 } from '@nestjs/common';
 import { CreateUserDto, RoleEnum, StatusEnum } from './user.schemas';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { Prisma, User } from '../../generated/prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { NullableType } from '../shared/shared.types';
 
 @Injectable()

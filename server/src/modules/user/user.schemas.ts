@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { createZodDto } from 'nestjs-zod';
 import { Serialized } from '../shared/shared.types';
-import { User } from '../../generated/prisma/client';
+import { User } from '@prisma/client';
 
 export enum RoleEnum {
   admin = 1,

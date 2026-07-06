@@ -44,9 +44,16 @@ export type GoogleConfig = {
   clientSecret?: string;
 };
 
+export type CloudinaryConfig = {
+  cloudName?: string;
+  apiKey?: string;
+  apiSecret?: string;
+};
+
 export type AllConfigType = {
   auth: AuthConfig;
   app: AppConfig;
   mail: MailConfig;
   google: GoogleConfig;
+  cloudinary: CloudinaryConfig;
 };

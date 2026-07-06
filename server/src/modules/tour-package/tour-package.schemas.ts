@@ -1,6 +1,6 @@
 import z from 'zod';
 import { Serialized } from '../shared/shared.types';
-import { TourPackage } from '../../generated/prisma/client';
+import { TourPackage } from '@prisma/client';
 import { createZodDto } from 'nestjs-zod';
 
 export const createTourPackageSchema = z.object({

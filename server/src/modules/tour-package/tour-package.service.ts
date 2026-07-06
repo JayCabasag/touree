@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma, TourPackage } from '../../generated/prisma/client';
+import { Prisma, TourPackage } from '@prisma/client';
 import { Filters, Page, PaginatedData } from '../shared/shared.types';
 import { queryParameters } from '../shared/pagination';
 import { CreateTourPackageDTO } from './tour-package.schemas';
