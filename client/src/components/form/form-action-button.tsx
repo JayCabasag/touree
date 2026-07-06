@@ -23,7 +23,7 @@ function FormActionButton({
       type={type}
       disabled={disabled || isSubmitting}
       className={cn(
-        "w-full bg-primary text-on-primary py-4 rounded-lg font-headline-xs text-headline-xs flex justify-center items-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all shadow-lg shadow-primary/20 disabled:opacity-60 disabled:pointer-events-none",
+        "w-full bg-primary text-on-primary py-3 rounded-lg font-headline-xs text-headline-xs flex justify-center items-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all shadow-lg shadow-primary/20 disabled:opacity-60 disabled:pointer-events-none",
         className,
       )}
       {...props}

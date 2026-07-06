@@ -52,3 +52,25 @@ export function useAuthSignUpService() {
     [fetchBase],
   );
 }
+
+export type AuthGoogleLoginRequest = {
+  idToken: string;
+};
+
+export type AuthGoogleLoginResponse = Tokens & {
+  user: User;
+};
+
+export function useAuthGoogleLoginService() {
+  const fetchBase = useFetch();
+
+  return useCallback(
+    (data: AuthGoogleLoginRequest) => {
+      return fetchBase(`${API_URL}/v1/auth/google/login`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      }).then(wrapperFetchJsonResponse<AuthGoogleLoginResponse>);
+    },
+    [fetchBase],
+  );
+}
