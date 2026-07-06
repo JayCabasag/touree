@@ -13,6 +13,9 @@ import { AuthGoogleModule } from './modules/auth-google/auth-google.module';
 import { MailModule } from './modules/mail/mail.module';
 import { MailerModule } from './modules/mailer/mailer.module';
 import { SessionModule } from './modules/session/session.module';
+import { CoordinatorAuthModule } from './modules/coordinator-auth/coordinator-auth.module';
+import { CoordinatorAuthGoogleController } from './modules/coordinator-auth-google/coordinator-auth-google.controller';
+import { CoordinatorAuthGoogleModule } from './modules/coordinator-auth-google/coordinator-auth-google.module';
 import authConfig from './modules/config/auth.config';
 import appConfig from './modules/config/app.config';
 import mailConfig from './modules/config/mail.config';
@@ -24,7 +27,7 @@ import googleConfig from './modules/config/google.config';
     PrismaModule,
     UserModule,
     BookingModule,
-    QuoteRequestModule,
+    // QuoteRequestModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [authConfig, appConfig, mailConfig, googleConfig],
@@ -34,8 +37,10 @@ import googleConfig from './modules/config/google.config';
     MailModule,
     MailerModule,
     SessionModule,
+    CoordinatorAuthModule,
+    CoordinatorAuthGoogleModule,
   ],
-  controllers: [],
+  controllers: [CoordinatorAuthGoogleController],
   providers: [
     PrismaService,
     {
