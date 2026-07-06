@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -9,7 +10,6 @@ import {
   AuthProviderEnum,
   AuthRegisterDTO,
   LoginResponseDTO,
-  RefreshResponseDto,
 } from './auth.schemas';
 import { UserService } from '../user/user.service';
 import { RoleEnum, StatusEnum, UserDTO } from '../user/user.schemas';
@@ -39,11 +39,17 @@ export class AuthService {
     private readonly sessionService: SessionService,
   ) {}
 
-  async validateLogin(loginDto: AuthLoginDTO) {
+  async validateLogin(loginDto: AuthLoginDTO, expectedRole: RoleEnum) {
     const user = await this.userService.getByEmail(loginDto.email);
 
     if (!user || user.provider !== AuthProviderEnum.EMAIL || !user.password) {
       throw new UnauthorizedException('invalidCredentials');
+    }
+
+    if (user.role !== expectedRole) {
+      throw new ForbiddenException(
+        'This account is not authorized to access this application',
+      );
     }
 
     const isValidPassword = await bcrypt.compare(
@@ -153,11 +159,11 @@ export class AuthService {
     };
   }
 
-  async register(dto: AuthRegisterDTO) {
+  async register(dto: AuthRegisterDTO, role: RoleEnum) {
     const user = await this.userService.create({
       ...dto,
       provider: AuthProviderEnum.EMAIL,
-      role: RoleEnum.user,
+      role,
       status: StatusEnum.inactive,
     });
 

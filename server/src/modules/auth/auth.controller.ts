@@ -17,6 +17,7 @@ import {
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { RoleEnum } from '../user/user.schemas';
 
 @Controller({
   path: 'auth',
@@ -28,13 +29,13 @@ export class AuthController {
   @Post('email/register')
   @HttpCode(HttpStatus.NO_CONTENT)
   async register(@Body() createUserDto: AuthRegisterDTO): Promise<void> {
-    return this.service.register(createUserDto);
+    return this.service.register(createUserDto, RoleEnum.user);
   }
 
   @Post('email/login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: AuthLoginDTO) {
-    return this.service.validateLogin(loginDto);
+    return this.service.validateLogin(loginDto, RoleEnum.user);
   }
 
   @Post('email/confirm')
