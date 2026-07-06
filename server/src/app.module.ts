@@ -16,6 +16,7 @@ import { SessionModule } from './modules/session/session.module';
 import authConfig from './modules/config/auth.config';
 import appConfig from './modules/config/app.config';
 import mailConfig from './modules/config/mail.config';
+import googleConfig from './modules/config/google.config';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import mailConfig from './modules/config/mail.config';
     QuoteRequestModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [authConfig, appConfig, mailConfig],
+      load: [authConfig, appConfig, mailConfig, googleConfig],
     }),
     TourPackageModule,
     AuthGoogleModule,

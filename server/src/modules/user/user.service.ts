@@ -8,6 +8,7 @@ import { CreateUserDto, RoleEnum, StatusEnum } from './user.schemas';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { Prisma, User } from '../../generated/prisma/client';
+import { NullableType } from '../shared/shared.types';
 
 @Injectable()
 export class UserService {
@@ -68,6 +69,16 @@ export class UserService {
 
   async getById(id: number): Promise<User | null> {
     return await this.prisma.user.findUnique({ where: { id } });
+  }
+
+  async getBySocialIdAndProvider({
+    socialId,
+    provider,
+  }: {
+    socialId: User['socialId'];
+    provider: User['provider'];
+  }): Promise<NullableType<User>> {
+    return await this.prisma.user.findFirst({ where: { socialId, provider } });
   }
 
   async getByEmail(email: string): Promise<User | null> {

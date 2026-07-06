@@ -26,6 +26,8 @@ import { SessionService } from '../session/session.service';
 import { toUserDTO } from '../user/user.mapper';
 import { JwtRefreshPayloadType } from './strategies/types/jwt-refresh-payload.type';
 import { JwtPayloadType } from './strategies/types/jwt-payload.type';
+import { SocialInterface } from '../social/interfaces/social.interfaces';
+import { NullableType } from '../shared/shared.types';
 
 @Injectable()
 export class AuthService {
@@ -73,6 +75,79 @@ export class AuthService {
     return {
       refreshToken,
       token,
+      tokenExpires,
+      user: toUserDTO(user),
+    };
+  }
+
+  async validateSocialLogin(authProvider: string, socialData: SocialInterface) {
+    let user: NullableType<User> = null;
+    const socialEmail = socialData.email?.toLowerCase();
+    let userByEmail: NullableType<User> = null;
+
+    if (socialEmail) {
+      userByEmail = await this.userService.getByEmail(socialEmail);
+    }
+
+    if (socialData.id) {
+      user = await this.userService.getBySocialIdAndProvider({
+        socialId: socialData.id,
+        provider: authProvider,
+      });
+    }
+
+    if (user) {
+      if (socialEmail && !userByEmail) {
+        user.email = socialEmail;
+      }
+      await this.userService.update(user.id, user);
+    } else if (userByEmail) {
+      user = userByEmail;
+    } else if (socialData.id) {
+      const role = RoleEnum.user;
+      const status = StatusEnum.active;
+
+      user = await this.userService.create({
+        email: socialEmail ?? '',
+        firstName: socialData.firstName ?? '',
+        lastName: socialData.lastName ?? '',
+        socialId: socialData.id,
+        provider: authProvider,
+        role,
+        status,
+      });
+
+      user = await this.userService.getById(user.id);
+    }
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const hash = crypto
+      .createHash('sha256')
+      .update(randomStringGenerator())
+      .digest('hex');
+
+    const session = await this.sessionService.create({
+      userId: user.id,
+      hash,
+    });
+
+    const {
+      token: jwtToken,
+      refreshToken,
+      tokenExpires,
+    } = await this.getTokensData({
+      id: user.id,
+      role: user.role,
+      sessionId: session.id,
+      hash,
+    });
+
+    return {
+      refreshToken,
+      token: jwtToken,
       tokenExpires,
       user: toUserDTO(user),
     };
