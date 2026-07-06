@@ -17,7 +17,6 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AllConfigType } from '../config/config.type';
 import { MailService } from '../mail/mail.service';
-import { Session, User } from '../../generated/prisma/client';
 import * as bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
@@ -28,6 +27,7 @@ import { JwtRefreshPayloadType } from './strategies/types/jwt-refresh-payload.ty
 import { JwtPayloadType } from './strategies/types/jwt-payload.type';
 import { SocialInterface } from '../social/interfaces/social.interfaces';
 import { NullableType } from '../shared/shared.types';
+import { PrismaClient, Session, User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {

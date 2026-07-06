@@ -5,8 +5,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
-  moduleFormat  = "cjs"
 }
 
 datasource db {
@@ -83,5 +81,12 @@ model Booking {
 
   coordinatorId Int
   coordinator   User @relation("CoordinatorBookings", fields: [coordinatorId], references: [id])
+}
 
+model File {
+  id                 Int      @id @default(autoincrement())
+  url                String
+  cloudinaryPublicId String   @unique
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }

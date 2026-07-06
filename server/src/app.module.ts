@@ -7,19 +7,21 @@ import { PrismaService } from './modules/prisma/prisma.service';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { TourPackageModule } from './modules/tour-package/tour-package.module';
-import { APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from './pipes/zod-validation.pipe';
 import { AuthGoogleModule } from './modules/auth-google/auth-google.module';
 import { MailModule } from './modules/mail/mail.module';
 import { MailerModule } from './modules/mailer/mailer.module';
 import { SessionModule } from './modules/session/session.module';
 import { CoordinatorAuthModule } from './modules/coordinator-auth/coordinator-auth.module';
-import { CoordinatorAuthGoogleController } from './modules/coordinator-auth-google/coordinator-auth-google.controller';
 import { CoordinatorAuthGoogleModule } from './modules/coordinator-auth-google/coordinator-auth-google.module';
+import { FileModule } from './modules/file/file.module';
+
+import { APP_PIPE } from '@nestjs/core';
 import authConfig from './modules/config/auth.config';
 import appConfig from './modules/config/app.config';
 import mailConfig from './modules/config/mail.config';
 import googleConfig from './modules/config/google.config';
+import cloudinaryConfig from './modules/config/cloudinary.config';
 
 @Module({
   imports: [
@@ -39,8 +41,9 @@ import googleConfig from './modules/config/google.config';
     SessionModule,
     CoordinatorAuthModule,
     CoordinatorAuthGoogleModule,
+    FileModule,
   ],
-  controllers: [CoordinatorAuthGoogleController],
+  controllers: [],
   providers: [
     PrismaService,
     {
