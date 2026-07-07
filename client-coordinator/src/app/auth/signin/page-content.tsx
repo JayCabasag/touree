@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import FormTextInput from "@/components/form/form-text-input";
 import { Checkbox } from "@/components/ui/checkbox";
 import withPageRequiredGuest from "@/services/auth/with-page-requred-guests";
+import { useRouter } from "next/navigation";
 
 type SignInFormData = {
   email: string;
@@ -41,6 +42,7 @@ function FormActions() {
 
 const Form = () => {
   const fetchAuthLogin = useAuthLoginService();
+  const router = useRouter();
 
   const { setUser } = useAuthActions();
   const { setTokensInfo } = useAuthTokens();
@@ -74,6 +76,10 @@ const Form = () => {
         tokenExpires: data.tokenExpires,
       });
       setUser(data.user);
+
+      const searchParams = new URLSearchParams(window.location.search);
+      const redirectTo = searchParams.get("redirect") || "/";
+      router.replace(redirectTo);
     }
   });
 

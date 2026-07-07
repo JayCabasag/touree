@@ -2,7 +2,9 @@
 
 import { cn, isPathnameActive } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Button } from "./ui/button";
+import useAuthActions from "@/services/auth/use-auth-actions";
 
 const navItems = [
   { label: "Dashboard", icon: "dashboard", href: "/" },
@@ -13,8 +15,18 @@ const navItems = [
 ];
 
 export function Sidebar() {
+  const router = useRouter();
+  const { logOut } = useAuthActions();
   const pathname = usePathname();
 
+  async function handleLogout() {
+    await logOut();
+
+    const currentPath = window.location.pathname;
+    const params = new URLSearchParams({ redirect: currentPath });
+
+    router.replace(`/auth/signin?${params.toString()}`);
+  }
   if (pathname.includes("/auth")) return null;
 
   return (
@@ -56,20 +68,25 @@ export function Sidebar() {
         </button>
       </div>
       <div className="border-t border-outline-variant p-4 space-y-1">
-        <a
-          className="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200"
-          href="#"
+        <Button
+          variant="link"
+          size={"lg"}
+          className="w-full flex items-center justify-start px-4 text-on-surface-variant cursor-pointer"
+          onClick={() => {}}
         >
           <span className="material-symbols-outlined">help</span>
           <span className="font-label-sm text-label-sm">Help Center</span>
-        </a>
-        <a
-          className="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200"
-          href="#"
+        </Button>
+
+        <Button
+          variant="link"
+          size={"lg"}
+          className="w-full flex items-center justify-start px-4 cursor-pointer"
+          onClick={handleLogout}
         >
           <span className="material-symbols-outlined">logout</span>
           <span className="font-label-sm text-label-sm">Logout</span>
-        </a>
+        </Button>
       </div>
     </aside>
   );
