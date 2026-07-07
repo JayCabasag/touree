@@ -219,7 +219,7 @@ const SignIn = () => {
             </p>
           </div>
           <div className="font-label-sm text-label-sm opacity-70">
-            © 2024 Touree Travel Marketplace.
+            © 2026 Touree Travel Marketplace.
           </div>
         </div>
 
@@ -268,4 +268,4 @@ const SignIn = () => {
   );
 };
 
-export default withPageRequiredGuest(SignIn);
+export default SignIn;

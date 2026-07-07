@@ -75,7 +75,7 @@ export default function GoogleAuth() {
       >
         {isReady && (
           <GoogleLogin
-            key={`${resolvedTheme}-${width}`}
+            key={`${resolvedTheme}`}
             onSuccess={onSuccess}
             theme={isDark ? "filled_black" : "outline"}
             size="large"

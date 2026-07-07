@@ -4,6 +4,7 @@ import "./globals.css";
 import { Sidebar } from "@/components/sidebar";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import AuthProvider from "@/services/auth/auth-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,12 +38,14 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen overflow-x-hidden text-on-surface">
-        <Sidebar />
-        <Header />
-        <main className="flex min-h-screen flex-col md:flex-row">
-          {children}
-        </main>
-        <Footer />
+        <AuthProvider>
+          <Sidebar />
+          <Header />
+          <main className="flex min-h-screen flex-col md:flex-row">
+            {children}
+          </main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

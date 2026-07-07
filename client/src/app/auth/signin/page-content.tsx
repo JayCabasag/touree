@@ -17,6 +17,7 @@ import Link from "next/link";
 import * as yup from "yup";
 import { isGoogleAuthEnabled } from "@/services/social-auth/google/google-auth";
 import SocialAuth from "@/services/social-auth/social-auth";
+import { useRouter } from "next/navigation";
 
 type SignInFormData = {
   email: string;
@@ -44,6 +45,7 @@ function FormActions() {
 }
 
 function Form() {
+  const router = useRouter();
   const fetchAuthLogin = useAuthLoginService();
 
   const { setUser } = useAuthActions();
@@ -78,6 +80,10 @@ function Form() {
         tokenExpires: data.tokenExpires,
       });
       setUser(data.user);
+
+      const searchParams = new URLSearchParams(window.location.search);
+      const redirectTo = searchParams.get("redirect") || "/";
+      router.replace(redirectTo);
     }
   });
 
@@ -184,4 +190,4 @@ function SignIn() {
   );
 }
 
-export default withPageRequiredGuest(SignIn);
+export default SignIn;
