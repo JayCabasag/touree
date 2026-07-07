@@ -29,7 +29,6 @@ function AuthProvider(props: PropsWithChildren) {
 
   const setTokensInfo = useCallback((tokensInfo: TokensInfo) => {
     setTokensInfoToStorage(tokensInfo);
-
     if (!tokensInfo) {
       setUser(null);
     }

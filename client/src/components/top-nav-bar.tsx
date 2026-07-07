@@ -32,15 +32,26 @@ export function TopNavBar() {
 }
 
 export function MainTopNavBar() {
-  const { user } = useAuth();
-  const { logOut } = useAuthActions();
   const pathname = usePathname();
   const router = useRouter();
+
+  const { user } = useAuth();
+  const { logOut } = useAuthActions();
+
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   function navigateAndClose(href: string) {
     setDrawerOpen(false);
     router.push(href);
+  }
+
+  async function handleLogout() {
+    await logOut();
+
+    const currentPath = window.location.pathname;
+    const params = new URLSearchParams({ redirect: currentPath });
+
+    router.replace(`/auth/signin?${params.toString()}`);
   }
 
   return (
@@ -114,7 +125,7 @@ export function MainTopNavBar() {
                         </li>
                         <li>
                           <button
-                            onClick={logOut}
+                            onClick={handleLogout}
                             className="flex items-center gap-3 rounded-xl px-3 py-2 w-full text-left text-body-md font-body-md text-error hover:bg-surface-container-low transition-colors"
                           >
                             <span className="material-symbols-outlined">

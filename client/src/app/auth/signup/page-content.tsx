@@ -251,4 +251,4 @@ function SignUp() {
   );
 }
 
-export default withPageRequiredGuest(SignUp);
+export default SignUp;

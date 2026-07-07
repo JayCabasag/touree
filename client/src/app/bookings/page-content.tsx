@@ -480,4 +480,4 @@ function Bookings() {
   );
 }
 
-export default withPageRequiredAuth(Bookings);
+export default Bookings;
